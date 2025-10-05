@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Load the Titanic dataset
-df = pd.read_csv(r"Your Dataset Path\titanic.csv")
+df = pd.read_csv(r"C:\Users\LENOVO\OneDrive\Desktop\ds_helper library\Titanic-Dataset.csv")
 
 def detect_column_types(df, categorical_threshold=20):
     column_types = {}
