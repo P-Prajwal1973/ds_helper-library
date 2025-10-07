@@ -1,14 +1,10 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
-from detector import detect_column_types  # Import from detector.py
+from detector import detect_column_types
 
 
 def visualize(df):
-    """Create charts for each column in df based on detected column types.
-
-    This function shows plots (uses matplotlib). It is safe to import the
-    module but will only draw when `visualize` is called.
-    """
+    """Quick visualization: show charts per detected column type."""
     column_types = detect_column_types(df)
     for col, col_type in column_types.items():
         plt.figure(figsize=(8,5))
@@ -39,30 +35,16 @@ def visualize(df):
 
         elif col_type == 'text':
             text = ' '.join(df[col].dropna().astype(str))
-            # Frequency plot for most common words
             from collections import Counter
             words = text.split()
-            word_freq = Counter(words)
-            most_common = word_freq.most_common(20)
-            words, freqs = zip(*most_common) if most_common else ([], [])
-            plt.bar(words, freqs)
-            plt.xticks(rotation=45, ha='right')
-            plt.title('Top 20 Word Frequency')
-            plt.ylabel('Frequency')
+            most_common = Counter(words).most_common(20)
+            if most_common:
+                w, f = zip(*most_common)
+                plt.bar(w, f)
+                plt.xticks(rotation=45, ha='right')
+                plt.title('Top 20 Word Frequency')
 
         plt.tight_layout()
         plt.show()
 
-if __name__ == "__main__":
-    import argparse
-    import pandas as pd
-
-    parser = argparse.ArgumentParser(description="Visualize a CSV dataset using heuristics")
-    parser.add_argument("csv", nargs="?", help="Path to CSV file to visualize")
-    args = parser.parse_args()
-
-    if not args.csv:
-        print("Provide a CSV file path to visualize. Example: python visualizer.py Titanic-Dataset.csv")
-    else:
-        df = pd.read_csv(args.csv)
-        visualize(df)
+__all__ = ["visualize"]
